@@ -1,0 +1,20 @@
+h3, ul {
+	margin: 0;
+}
+
+body{
+	background-color: rgba(220, 220, 220, 0.36);
+    font-size: small;
+    font-family: ver;
+}
+h4 {
+	margin: 5px;
+}
+ul {
+	margin-left: -20px;
+	width: 300px;
+	list-style-type: square;
+}
+.subMenu {
+	list-style-type: circle;
+}

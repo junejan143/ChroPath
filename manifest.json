@@ -1,0 +1,26 @@
+{
+    "manifest_version": 2,
+    "name": "ChroPath",
+    "description": "XPpath editor and evaluator. Write the xpath in devtools sidebar panel accessing DOM and verify there itself.",
+    "version": "0.0.1",
+    "browser_action": {
+        "default_icon": "icon.png",
+        "default_popup": "extension/popup.html"
+    },
+    "background": {
+        "scripts": ["extension/background.js"],
+        "persistent": false
+    },
+    "permissions": [
+        "activeTab"
+    ],
+    
+    "content_scripts": [{
+        "matches": ["<all_urls>"],
+        "css": ["content-script/contentScript.css"],
+        "js": ["content-script/contentScript.js"]
+    }],
+
+    "devtools_page": "devtools-panel/devtools.html"
+    
+}

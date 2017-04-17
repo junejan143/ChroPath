@@ -1,0 +1,96 @@
+body {
+	margin: 0;
+}
+ul, div, p {
+    padding: 0;
+    margin: 0;
+}
+
+.header {
+	background-color: #F5F5F5;
+	padding: 5px;
+	border: 1px solid rgba(0, 0, 0, 0.14);
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 45px;
+  overflow: hidden;
+}
+
+.header1 {
+  overflow: auto;
+}
+.boxTitle{
+    background-color: rgba(76, 175, 80, 0.78);
+    color: white;
+    border: 0px solid white;
+    padding: 3px;
+    border-radius: 4px;
+    font-size: x-small;
+    margin: 0 4 2 0px;
+    text-shadow: 1px 1px 0.5px black;
+    line-height: 1em;
+}
+.xpath-input {
+    width: 80%;
+    margin: 5 0 4 0px;
+    border: 1px solid black;
+}
+
+.total-count {
+	color: #0000FF;*/
+  text-align: justify;
+  width: auto;
+  padding: 2px 5px;
+  visibility: visible; 
+  overflow: auto; 
+  height: 16px;
+}
+
+#eleContainer {
+    margin-top: 60px;
+}
+
+li {
+    color: black;
+    padding: 5 0px;
+    margin-top: 5px;
+    max-width: 100%;
+    padding: 2px 5px;
+    background-color: #F5F5F5;
+    cursor: pointer;  
+    list-style-type: none;
+}
+
+.summary, .content {
+  pointer-events: none;
+  display: inline-block;
+}
+
+.close .content {
+  display: none;
+}
+
+.open .content {
+  display:block;
+  background-color: rgba(255, 255, 255, 0.84);
+  padding-left: 4px;
+  margin: 10px 0 10 20px;
+}
+
+.close .summary:before {
+  content: "\25B8";
+}
+
+.open .summary:before {
+  content: "\25BE";
+}
+
+.wrongXpath {
+  background-color: #FF6347;
+  color: white;
+}
+.hideCountMsg {
+  visibility: hidden;
+}
