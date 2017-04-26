@@ -22,14 +22,13 @@ ul, div, p {
   overflow: auto;
 }
 .boxTitle{
-    background-color: rgba(76, 175, 80, 0.78);
-    color: white;
+    background-color: rgba(169, 169, 169, 0.64);
+    color: black;
     border: 0px solid white;
     padding: 3px;
     border-radius: 4px;
     font-size: x-small;
     margin: 0 4 2 0px;
-    text-shadow: 1px 1px 0.5px black;
     line-height: 1em;
     height: 17px;
     position: relative;

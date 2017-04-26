@@ -34,7 +34,6 @@ var showTotalResults = function(count) {
 
 var highlighter = function (ele) {
     var xpathOrCss = document.querySelector(".boxTitle").value.toLocaleLowerCase();
-    //var eleIndex = ele.getAttribute('xpath');
     var eleIndex = ele.getAttribute(xpathOrCss);
 
     backgroundPageConnection.postMessage({
@@ -46,7 +45,6 @@ var highlighter = function (ele) {
 
 var removeHighlighter = function (ele) {
     var xpathOrCss = document.querySelector(".boxTitle").value.toLocaleLowerCase();
-    //var eleIndex = ele.getAttribute('xpath');
     var eleIndex = ele.getAttribute(xpathOrCss);
     
     backgroundPageConnection.postMessage({
@@ -153,9 +151,11 @@ document.addEventListener("DOMContentLoaded", function() {
     boxTitle.addEventListener("change", function(){
         var xpathOrCss = boxTitle.value;
         if(xpathOrCss.includes("CSS")){
-            inputBox.setAttribute("placeholder","type CSS selector and press enter");
+            inputBox.setAttribute("placeholder","write CSS selector and press enter");
+            boxTitle.style.backgroundColor = "rgba(76, 175, 80, 0.78)";
         }else{
-            inputBox.setAttribute("placeholder","type XPath and press enter");
+            inputBox.setAttribute("placeholder","write XPath and press enter");
+            boxTitle.style.backgroundColor = "rgba(169, 169, 169, 0.64)";
         }
         selectElements(xpathOrCss, true);
     });
