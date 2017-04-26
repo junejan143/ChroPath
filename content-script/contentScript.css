@@ -1,4 +1,4 @@
 
-[xpath], [xpath]:hover {
+[xpath], [xpath]:hover, [css], [css]:hover{
     outline: 2px dashed blue;
 }

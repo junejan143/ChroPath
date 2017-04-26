@@ -4,4 +4,3 @@ chrome.devtools.panels.elements.createSidebarPane("ChroPath",
           }
 );
       
-

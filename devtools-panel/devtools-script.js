@@ -4,6 +4,7 @@ var backgroundPageConnection = chrome.runtime.connect({
 
 var showTotalResults = function(count) {
     var totalCountElem = document.querySelector(".jsTotalCount");
+    var xpathOrCss = document.querySelector(".boxTitle").value;
     try{
         if((count).includes("blank")){
                 totalCountElem.className += " hideCountMsg";
@@ -11,7 +12,7 @@ var showTotalResults = function(count) {
             totalCountElem.classList.remove("hideCountMsg");
             var xpathValue = document.querySelector(".jsXpath").value;
             if((count).includes("wrongXpath")){
-                totalCountElem.innerHTML = "Wrong XPath pattern. Please enter correct XPath.";
+                totalCountElem.innerHTML = "Invalid "+xpathOrCss+" pattern. Please enter valid "+xpathOrCss+".";
             }else if(count.length === 0){
                 totalCountElem.innerHTML = count.length + " matching node found.";
             }else if(xpathValue==="/" || xpathValue==="." || xpathValue==="/."){
@@ -32,20 +33,24 @@ var showTotalResults = function(count) {
 };
 
 var highlighter = function (ele) {
-    var eleIndex = ele.getAttribute('xpath');
-    
+    var xpathOrCss = document.querySelector(".boxTitle").value.toLocaleLowerCase();
+    //var eleIndex = ele.getAttribute('xpath');
+    var eleIndex = ele.getAttribute(xpathOrCss);
+
     backgroundPageConnection.postMessage({
-            name: "xpath",
+            name: xpathOrCss,
             tabId: chrome.devtools.inspectedWindow.tabId,
             index: eleIndex
     })
 }
 
 var removeHighlighter = function (ele) {
-    var eleIndex = ele.getAttribute('xpath');
+    var xpathOrCss = document.querySelector(".boxTitle").value.toLocaleLowerCase();
+    //var eleIndex = ele.getAttribute('xpath');
+    var eleIndex = ele.getAttribute(xpathOrCss);
     
     backgroundPageConnection.postMessage({
-            name: "xpath-remove",
+            name: xpathOrCss+"-remove",
             tabId: chrome.devtools.inspectedWindow.tabId,
             index: eleIndex
     })
@@ -53,6 +58,7 @@ var removeHighlighter = function (ele) {
 
 var showAllMatchingNode = function(allNode) {
     var nodeDom = document.querySelector("#eleContainer");
+    var xpathOrCss = document.querySelector(".boxTitle").value.toLocaleLowerCase();
     nodeDom.innerHTML = "";
     if(allNode!="blank"){
         for (var i=1; i<=allNode.length; i++) {
@@ -60,7 +66,7 @@ var showAllMatchingNode = function(allNode) {
             if(allNode[i-1]){
                 var newEle = document.createElement('li');
                 newEle.className = "close";
-                newEle.setAttribute('xpath', i);
+                newEle.setAttribute(xpathOrCss, i);
                 var newEleSummary = document.createElement('div');
                 var newEleContent = document.createElement('div');
                 newEleSummary.className = "summary";
@@ -98,20 +104,19 @@ var showAllMatchingNode = function(allNode) {
     }
 };
 
-var selectElements = function() {
-    var xpath = document.querySelector(".jsXpath").value;
-    
-        clearElements();
-        backgroundPageConnection.postMessage({
-            name: "xpath-message",
-            tabId: chrome.devtools.inspectedWindow.tabId,
-            xpath: xpath
-        });
-    
+var selectElements = function(xpathOrCss, onChange) {
+    var xpath = [xpathOrCss, document.querySelector(".jsXpath").value, onChange];
+    clearElements();
+    backgroundPageConnection.postMessage({
+        name: "xpath-message",
+        tabId: chrome.devtools.inspectedWindow.tabId,
+        xpath: xpath
+    });   
 };
 
 backgroundPageConnection.onMessage.addListener(function(message) {
     var wrong;
+    var xpathOrCss = document.querySelector(".boxTitle").value;
     try{
         wrong = (message.count).includes("wrongXpath");
     }
@@ -127,7 +132,7 @@ backgroundPageConnection.onMessage.addListener(function(message) {
         showAllMatchingNode(message.count);
         if(message.event) {
             if(message.event === "shown") {
-                selectElements();
+                selectElements(xpathOrCss, false);
             }
         }
     }
@@ -141,18 +146,29 @@ backgroundPageConnection.postMessage({
 });
 
 document.addEventListener("DOMContentLoaded", function() {
-    document.querySelector(".jsXpath").focus();
     var inputBox = document.querySelector(".jsXpath");
+    inputBox.focus();
+    var boxTitle = document.querySelector(".boxTitle");
     
+    boxTitle.addEventListener("change", function(){
+        var xpathOrCss = boxTitle.value;
+        if(xpathOrCss.includes("CSS")){
+            inputBox.setAttribute("placeholder","type CSS selector and press enter");
+        }else{
+            inputBox.setAttribute("placeholder","type XPath and press enter");
+        }
+        selectElements(xpathOrCss, true);
+    });
+
     inputBox.addEventListener("keyup", function(event){
+            var xpathOrCss = boxTitle.value;
             var key = event.which || event.keyCode;
             if (key === 13) { 
-                selectElements();
+                selectElements(xpathOrCss, false);
             }else{
                 checkWrongXpath();
             }
     });
-
 
     var ulElem = document.querySelector("ul");
 
@@ -183,17 +199,23 @@ var checkWrongXpath = function(){
     var inputBox = document.querySelector(".jsXpath");
     var xpathValue = inputBox.value;
     var totalCountElem = document.querySelector(".jsTotalCount");
+    var xpathOrCss = document.querySelector(".boxTitle").value;
     if(!xpathValue){
             totalCountElem.className += " hideCountMsg";
-            selectElements();
+            selectElements(xpathOrCss, false);
             clearElements();
     }
     if(inputBox.getAttribute("class").includes("wrongXpath")){
         removeWrongXpath();
     }
+
     if(xpathValue){
         try{
-             elements = document.evaluate(xpathValue, document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
+            if(xpathOrCss==="XPath"){
+                elements = document.evaluate(xpathValue, document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
+            }else if(xpathOrCss==="CSS"){
+                elements = document.querySelectorAll(xpathValue);
+            }
         }catch(err){
             highlightWrongXpath();    
         }
@@ -206,6 +228,7 @@ var clearElements = function(){
     countElement.innerHTML = "";
     listElements.innerHTML = "";
 }
+
 
 
 
