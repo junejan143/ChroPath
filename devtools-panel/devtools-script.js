@@ -151,12 +151,13 @@ document.addEventListener("DOMContentLoaded", function() {
     boxTitle.addEventListener("change", function(){
         var xpathOrCss = boxTitle.value;
         if(xpathOrCss.includes("CSS")){
-            inputBox.setAttribute("placeholder","write CSS selector and press enter");
+            inputBox.setAttribute("placeholder"," type CSS selector and press enter");
             boxTitle.style.backgroundColor = "rgba(76, 175, 80, 0.78)";
         }else{
-            inputBox.setAttribute("placeholder","write XPath and press enter");
+            inputBox.setAttribute("placeholder"," type XPath and press enter");
             boxTitle.style.backgroundColor = "rgba(169, 169, 169, 0.64)";
         }
+        inputBox.focus();
         selectElements(xpathOrCss, true);
     });
 
@@ -228,6 +229,27 @@ var clearElements = function(){
     countElement.innerHTML = "";
     listElements.innerHTML = "";
 }
+      
+chrome.devtools.panels.elements.onSelectionChanged.addListener(function(){
+    var xpathOrCss = document.querySelector(".boxTitle").value;
+    if(xpathOrCss.includes("XPath")){
+        var absoluteXPath = chrome.devtools.inspectedWindow.eval('generateXpath($0)', { useContentScriptContext: true }, function(result) {
+            console.log("absolute XPath -"+result);
+            var inputBox = document.querySelector(".jsXpath");
+            inputBox.value = result;
+            inputBox.focus();
+            //inputBox.setAttribute("value",result);
+        });
+    }else{
+        var absoluteXPath = chrome.devtools.inspectedWindow.eval('generateCSS($0)', { useContentScriptContext: true }, function(result) {
+            console.log("CSS -"+result);
+            var inputBox = document.querySelector(".jsXpath");
+            inputBox.value = result;
+            inputBox.focus();
+        });
+    }
+    selectElements(xpathOrCss, false);
+}); 
 
 
 

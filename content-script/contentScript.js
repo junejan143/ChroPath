@@ -106,3 +106,47 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
         }
     }
 });
+
+function generateXpath(element) {
+    if (element.id!=='')
+        return 'id("'+element.id+'")';
+    if (element.tagName == 'html')
+        return '/html[1]';
+    if (element===document.body)
+        return '/html[1]/body[1]';
+
+    var ix= 0;
+    var siblings= element.parentNode.childNodes;
+    for (var i= 0; i<siblings.length; i++) {
+        var sibling= siblings[i];
+        if (sibling===element)
+            return generateXpath(element.parentNode)+'/'+element.tagName.toLowerCase()+'['+(ix+1)+']';
+        if (sibling.nodeType===1 && sibling.tagName.toLowerCase()===element.tagName.toLowerCase())
+            ix++;
+    }
+}
+
+function generateCSS(el) {
+        if (!(el instanceof Element)) 
+            return;
+        var path = [];
+        while (el.nodeType === Node.ELEMENT_NODE) {
+            var selector = el.nodeName.toLowerCase();
+            if (el.id) {
+                selector += '#' + el.id;
+                path.unshift(selector);
+                break;
+            } else {
+                var sib = el, nth = 1;
+                while (sib = sib.previousElementSibling) {
+                    if (sib.nodeName.toLowerCase() == selector)
+                       nth++;
+                }
+                if (nth != 1)
+                    selector += ":nth-of-type("+nth+")";
+            }
+            path.unshift(selector);
+            el = el.parentNode;
+        }
+        return path.join(">");
+}
