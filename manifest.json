@@ -2,7 +2,7 @@
     "manifest_version": 2,
     "name": "ChroPath",
     "description": "XPath editor and evaluator.",
-    "version": "0.0.4",
+    "version": "0.0.5",
     "browser_action": {
         "default_icon": "icon.png",
         "default_popup": "extension/popup.html"

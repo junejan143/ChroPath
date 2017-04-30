@@ -136,7 +136,7 @@ function generateCSS(el) {
                 path.unshift('#'+el.id);
                 break;
             }else if (el.className){
-                path.unshift('.'+el.className.trim().replace(new RegExp(" ",'g'), "."));
+                path.unshift('.'+el.className.trim().replace(/\s+/g, "."));
                 break;
             }else {
                 var sib = el, nth = 1;
