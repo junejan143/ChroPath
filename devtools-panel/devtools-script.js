@@ -234,21 +234,19 @@ chrome.devtools.panels.elements.onSelectionChanged.addListener(function(){
     var xpathOrCss = document.querySelector(".boxTitle").value;
     if(xpathOrCss.includes("XPath")){
         var absoluteXPath = chrome.devtools.inspectedWindow.eval('generateXpath($0)', { useContentScriptContext: true }, function(result) {
-            console.log("absolute XPath -"+result);
             var inputBox = document.querySelector(".jsXpath");
             inputBox.value = result;
             inputBox.focus();
-            //inputBox.setAttribute("value",result);
+            selectElements(xpathOrCss, false);
         });
     }else{
         var absoluteXPath = chrome.devtools.inspectedWindow.eval('generateCSS($0)', { useContentScriptContext: true }, function(result) {
-            console.log("CSS -"+result);
             var inputBox = document.querySelector(".jsXpath");
             inputBox.value = result;
             inputBox.focus();
+            selectElements(xpathOrCss, false);
         });
     }
-    selectElements(xpathOrCss, false);
 }); 
 
 
