@@ -235,15 +235,17 @@ chrome.devtools.panels.elements.onSelectionChanged.addListener(function(){
     if(xpathOrCss.includes("XPath")){
         var absoluteXPath = chrome.devtools.inspectedWindow.eval('generateXpath($0)', { useContentScriptContext: true }, function(result) {
             var inputBox = document.querySelector(".jsXpath");
-            inputBox.value = result;
             inputBox.focus();
+            document.execCommand("selectAll");
+            document.execCommand("insertText", false, result);
             selectElements(xpathOrCss, false);
         });
     }else{
         var absoluteXPath = chrome.devtools.inspectedWindow.eval('generateCSS($0)', { useContentScriptContext: true }, function(result) {
             var inputBox = document.querySelector(".jsXpath");
-            inputBox.value = result;
             inputBox.focus();
+            document.execCommand("selectAll");
+            document.execCommand("insertText", false, result);
             selectElements(xpathOrCss, false);
         });
     }
