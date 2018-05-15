@@ -13,5 +13,5 @@
 
 Note: 
 
-1- To use CSS features, first change the dropdown value from XPath to CSS in header.
-2- Tool will add xpath/css attribute to all the matching node(s) as per their sequential occurrence. For example, a matching node appearing second in the list will have xpath=2. And if verifying CSS then it will add css=2.
+1. To use CSS features, first change the dropdown value from XPath to CSS in header.
+2. Tool will add xpath/css attribute to all the matching node(s) as per their sequential occurrence. For example, a matching node appearing second in the list will have xpath=2. And if verifying CSS then it will add css=2.
